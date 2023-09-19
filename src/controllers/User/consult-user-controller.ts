@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { UserModel } from "../../models/User/user-model";
-import { ConsultUser } from "../../use-cases/User/consult-user";
+import { UserModel } from "../../models/user/user-model";
+import { ConsultUser } from "../../use-cases/user/consult-user";
 
 export class ConsultUserController {
   async handle(req: Request, res: Response) {
