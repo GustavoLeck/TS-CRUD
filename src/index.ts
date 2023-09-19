@@ -1,7 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 import Status from "./routes/status-route";
-import User from "./routes/User/user-route";
+import User from "./routes/user/user-route";
 
 const server = express();
 
