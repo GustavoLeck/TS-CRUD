@@ -5,7 +5,7 @@ export class UserModel {
   public Senha: string;
 
   constructor(usuario: any) {
-    this.Nome = usuario.Nome;
+    this.Nome = usuario?.Nome;
     this.Sobrenome = usuario.Sobrenome;
     this.Usuario = usuario.Usuario;
     this.Senha = usuario.Senha;
