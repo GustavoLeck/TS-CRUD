@@ -17,11 +17,17 @@ export class UpdateUserDatabase {
       });
       return {
         status: true,
+        code: 200,
         message: "Atualização realizada com sucesso.",
         data: response,
       };
     } catch (error) {
-      return { status: false, message: error, data: [] };
+      return {
+        status: false,
+        code: 500,
+        message: "Erro ao atualizar conta",
+        data: error,
+      };
     }
   }
 }

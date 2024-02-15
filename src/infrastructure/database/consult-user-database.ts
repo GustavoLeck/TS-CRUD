@@ -14,11 +14,12 @@ export class ConsultUserDatabase {
       });
       return {
         status: true,
+        code: 200,
         message: "Consulta realizada com sucesso.",
         data: response,
       };
     } catch (error) {
-      return { status: false, message: error, data: [] };
+      return { status: false, code: 500, message: error, data: [] };
     }
   }
 }

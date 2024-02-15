@@ -10,11 +10,17 @@ export class DeleteUserDatabase {
       });
       return {
         status: true,
+        code: 200,
         message: "Exclusão realizada com sucesso.",
         data: response,
       };
     } catch (error) {
-      return { status: false, message: error, data: [] };
+      return {
+        status: false,
+        code: 500,
+        message: "Erro ao excluir conta",
+        data: error,
+      };
     }
   }
 }
