@@ -5,7 +5,7 @@ WORKDIR /usr/app
 COPY ./package.json .
 
 RUN npm i
-RUN npx prisma generate -y
+RUN npx prisma generate 
 
 COPY . .
 
