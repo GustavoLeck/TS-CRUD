@@ -9,11 +9,6 @@ export class UpdateUserController {
       req.body.idUser,
       usuarioFormatado
     );
-
-    if (contaAtualizada.status) {
-      res.status(200).send(contaAtualizada);
-    } else {
-      res.status(500).send(contaAtualizada);
-    }
+    return res.status(contaAtualizada.code).send(contaAtualizada);
   }
 }

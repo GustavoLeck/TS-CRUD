@@ -12,9 +12,19 @@ export class CreateUserDatabase {
           Senha: user.Senha,
         },
       });
-      return { status: true, message: "Conta criada com sucesso." };
+      return {
+        status: true,
+        code: 200,
+        message: "Conta criada com sucesso.",
+        data: [],
+      };
     } catch (error) {
-      return { status: false, message: error };
+      return {
+        status: false,
+        code: 500,
+        message: "Erro ao criar conta",
+        data: error,
+      };
     }
   }
 }
