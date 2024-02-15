@@ -1,0 +1,11 @@
+version: "1.0"
+
+services:
+  api:
+    build: .
+    restart: on-failure
+    container_name: ts-crud
+    image: ts-crud
+    command: npm start
+    ports:
+      - "5500:5500"
