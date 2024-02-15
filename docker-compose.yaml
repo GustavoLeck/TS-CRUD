@@ -6,6 +6,6 @@ services:
     restart: on-failure
     container_name: ts-crud
     image: ts-crud
-    command: npm start
+    command: npx prisma generate && npm start
     ports:
       - "5500:5500"
