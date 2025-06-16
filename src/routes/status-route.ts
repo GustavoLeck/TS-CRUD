@@ -1,10 +1,7 @@
-import express from "express"
-import {Request, Response } from 'express';
+import express from "express";
+import { StatusController } from "../controllers/status-controller";
 const router = express.Router();
 
-router.get(`/status`, (req : Request, res : Response)=>{
-    console.log("   => Rotas de consulta de status utilizada")
-    res.send({status: "Ok"})
-})
+router.get(`/status`, new StatusController().handle);
 
 export default router;
