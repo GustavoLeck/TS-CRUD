@@ -1,4 +1,10 @@
 import amqp from "amqplib";
+import { Converters } from "../helpers/converters";
+
+// Extends the globalThis type to include rabbitChannel
+declare global {
+  var rabbitChannel: amqp.Channel;
+}
 export class RabbitMq {
   channel!: amqp.Channel;
   queues: Array<string> = [];
@@ -13,6 +19,22 @@ export class RabbitMq {
       const connection = await amqp.connect(rabbitMqUrl);
       this.channel = await connection.createChannel();
       console.log("RabbitMQ conectado");
+      this.channel.assertExchange(
+        process.env.RABBIT_EXCHANGE_NAME || ("RabbitMq_Exchange" as string),
+        process.env.RABBIT_EXCHANGE_TYPE || ("direct" as string),
+        { durable: true }
+      );
+      this.channel.prefetch(
+        new Converters().StringToNumber(
+          process.env.RABBIT_MAX_REQUESTS as string
+        )
+      );
+      globalThis.rabbitChannel = this.channel as amqp.Channel;
+      console.log(
+        ` => Exchange '${
+          process.env.RABBIT_EXCHANGE_NAME || "RabbitMq_Exchange"
+        }' criado com sucesso`
+      );
     } catch (err) {
       console.error("Erro ao conectar com o RabbitMQ");
       return;
@@ -37,8 +59,13 @@ export class RabbitMq {
     }
     for (const queue of this.queues) {
       try {
-        await this.channel.assertQueue(queue);
-        console.log(` -- Fila '${queue}' criada com sucesso`);
+        await this.channel.assertQueue(queue, { durable: true });
+        await this.channel.bindQueue(
+          queue,
+          process.env.RABBIT_EXCHANGE_NAME || ("RabbitMq_Exchange" as string),
+          queue
+        );
+        console.log(` > Fila '${queue}' criada com sucesso`);
       } catch (error) {
         console.error(`Erro ao criar a fila ${queue}:`, error);
         continue;
@@ -47,5 +74,8 @@ export class RabbitMq {
   }
   getQueues(): Array<string> {
     return this.queues;
+  }
+  getChannel(): amqp.Channel {
+    return this.channel;
   }
 }

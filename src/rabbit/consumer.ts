@@ -21,21 +21,18 @@ export class RabbitConsumer {
       send: () => false,
     } as unknown as import("express").Response;
   }
-
   async turnOn() {
     if (this.channel == null) {
       console.error("Canal RabbitMQ não está conectado");
       return;
     }
-    try {
-      await this.channel.consume("status", async (msg: any) => {
-        if (msg !== null) {
-          this.req.body = msg;
-          await new StatusController().handle(this.req, this.res);
-        }
-        this.channel.ack(msg); //Exclui a mensagem da fila após o processamento
-        console.log("Mensagem processada e confirmada");
-      });
-    } catch (error) {}
+    await this.channel.consume("status", async (msg: any) => {
+      if (msg !== null) {
+        this.req.body = msg;
+        await new StatusController().handle(this.req, this.res);
+      }
+      this.channel.ack(msg); //Exclui a mensagem da fila após o processamento
+      console.log("Mensagem processada e confirmada");
+    });
   }
 }

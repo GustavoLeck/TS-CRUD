@@ -6,7 +6,7 @@ import User from "./routes/user/user-route";
 import { RabbitMq } from "./rabbit/connect";
 import { RabbitConsumer } from "./rabbit/consumer";
 import { IRabbitMq } from "./interfaces/rabbimq.interface";
-import { BooleanConverter } from "./helpers/boolean-converter";
+import { Converters } from "./helpers/converters";
 
 const server = express();
 dotenv.config();
@@ -15,10 +15,8 @@ server.use("/api", Status);
 server.use("/api", User);
 server.listen(process.env.SERVICE_PORT || 5500, async () => {
   console.clear();
-  if (
-    new BooleanConverter().StringToBoolean(process.env.USE_RABBITMQ as string)
-  ) {
-    const Rabbit: IRabbitMq = new RabbitMq(["status"]);
+  if (new Converters().StringToBoolean(process.env.USE_RABBITMQ as string)) {
+    const Rabbit: IRabbitMq = new RabbitMq(["status", "user"]);
     await Rabbit.connect();
     await new RabbitConsumer(Rabbit.channel).turnOn();
   }
